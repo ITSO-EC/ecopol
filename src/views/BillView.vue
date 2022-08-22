@@ -55,8 +55,8 @@
         </button>
       </div>
 
-      <ECard v-for="(bill, index) in bills" :key="`Bill-${index}`" :image="bill.image" :name="`${bill.name}`"
-        :avgprice="bill.price * energyPrice" :power="bill.consumption" />
+      <ECard @click="pop(bill)" v-for="(bill, index) in bills" :key="`Bill-${index}`" :image="bill.image"
+        :name="`${bill.name}`" :avgprice="bill.price * energyPrice" :power="bill.consumption" />
       <ECard v-if="bills.length < 1" image='https://icon-library.com/images/not-found-icon/not-found-icon-18.jpg'
         :name="'Agregue un electrodoméstico para comenzar.'" :avgprice="'0'" :power="'0'">
       </ECard>
@@ -131,7 +131,7 @@
       </div>
     </ModalBasic>
     <ModalBasic id="feedback-modal" :modalOpen="informeModalOpen" @close-modal="informeModalOpen = false"
-      title="Editar consumo eléctrico">
+      title="Consumo eléctrico">
       <!-- Modal content -->
       <div class="px-5 py-4">
 
@@ -221,6 +221,9 @@ export default {
     }
   },
   methods: {
+    pop(i) {
+      this.bills = this.bills.filter(item => item !== i)
+    },
     selectImage(image) {
       this.data.image = image
     },
@@ -239,7 +242,7 @@ export default {
         this.$data.bills.push({
           image: this.data.image,
           name: this.data.name,
-          price: this.data.hours * 30,
+          price: this.data.hours * 30 * (this.data.consumption / 1000),
           consumption: this.data.consumption
         });
         this.resetData();
